@@ -1,0 +1,4 @@
+Github Link: https://github.com/Shubham-Vishwakarma/RockPaperScissorsAPI
+Setup Database: https://github.com/Shubham-Vishwakarma/RockPaperScissorsAPI/blob/main/database/database.sql
+Jar File: https://github.com/Shubham-Vishwakarma/RockPaperScissorsAPI/blob/main/jar/rockpaperscissors-6.4.0.jar
+
