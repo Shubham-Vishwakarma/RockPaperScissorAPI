@@ -5,7 +5,12 @@ import com.vocera.rockpaperscissors.models.GameStep;
 import com.vocera.rockpaperscissors.models.Move;
 import com.vocera.rockpaperscissors.models.Status;
 
+import static com.vocera.rockpaperscissors.Constants.*;
+
 public class GameFactory {
+
+    private GameFactory() {
+    }
 
     public static Game createNewGame() {
 
@@ -16,7 +21,7 @@ public class GameFactory {
         newGame.setStatus(Status.READY);
         newGame.setUserScore(0);
         newGame.setServerScore(0);
-        newGame.setWinner("NOT_DECIDED");
+        newGame.setWinner(NOT_DECIDED);
 
         return newGame;
     }
@@ -27,21 +32,21 @@ public class GameFactory {
 
     public static void updateGameScore(Game game, GameStep step) {
         String winner = step.getWinner();
-        if(winner.equals("USER")) {
+        if(winner.equals(USER)) {
             game.setUserScore(game.getUserScore() + 1);
         }
-        else if(winner.equals("SERVER")) {
+        else if(winner.equals(SERVER)) {
             game.setServerScore(game.getServerScore() + 1);
         }
     }
 
     public static void updateIfGameOver(Game game) {
         if(game.getServerScore() == 3) {
-            game.setWinner("SERVER");
+            game.setWinner(SERVER);
             game.setStatus(Status.GAME_OVER);
         }
         else if(game.getUserScore() == 3) {
-            game.setWinner("USER");
+            game.setWinner(USER);
             game.setStatus(Status.GAME_OVER);
         }
     }

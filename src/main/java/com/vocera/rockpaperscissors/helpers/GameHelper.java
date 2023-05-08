@@ -4,11 +4,9 @@ import com.vocera.rockpaperscissors.models.Move;
 
 import java.util.Random;
 
-public class GameHelper {
+import static com.vocera.rockpaperscissors.Constants.*;
 
-    private static final String USER = "USER";
-    private static final String SERVER = "SERVER";
-    private static final String TIE = "TIE";
+public class GameHelper {
     private static final Random random = new Random();
 
     private GameHelper() {

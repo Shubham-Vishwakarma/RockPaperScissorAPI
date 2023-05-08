@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 
+import static com.vocera.rockpaperscissors.Constants.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameHelperTest {
@@ -25,55 +26,55 @@ class GameHelperTest {
     @Test
     void getWinnerUserRockWinsTest() {
         String winner = GameHelper.getWinner(Move.ROCK, Move.SCISSORS);
-        assertEquals("USER", winner);
+        assertEquals(USER, winner);
     }
 
     @Test
     void getWinnerServerRockTest() {
         String winner = GameHelper.getWinner(Move.SCISSORS, Move.ROCK);
-        assertEquals("SERVER", winner);
+        assertEquals(SERVER, winner);
     }
 
     @Test
     void getWinnerUserPaperWinsTest() {
         String winner = GameHelper.getWinner(Move.PAPER, Move.ROCK);
-        assertEquals("USER", winner);
+        assertEquals(USER, winner);
     }
 
     @Test
     void getWinnerServerPaperTest() {
         String winner = GameHelper.getWinner(Move.ROCK, Move.PAPER);
-        assertEquals("SERVER", winner);
+        assertEquals(SERVER, winner);
     }
 
     @Test
     void getWinnerUserScissorWinsTest() {
         String winner = GameHelper.getWinner(Move.SCISSORS, Move.PAPER);
-        assertEquals("USER", winner);
+        assertEquals(USER, winner);
     }
 
     @Test
     void getWinnerServerScissorTest() {
         String winner = GameHelper.getWinner(Move.PAPER, Move.SCISSORS);
-        assertEquals("SERVER", winner);
+        assertEquals(SERVER, winner);
     }
 
     @Test
     void getWinnerServerPaperTieTest() {
         String winner = GameHelper.getWinner(Move.PAPER, Move.PAPER);
-        assertEquals("TIE", winner);
+        assertEquals(TIE, winner);
     }
 
     @Test
     void getWinnerServerRockTieTest() {
         String winner = GameHelper.getWinner(Move.ROCK, Move.ROCK);
-        assertEquals("TIE", winner);
+        assertEquals(TIE, winner);
     }
 
     @Test
     void getWinnerServerScissorTieTest() {
         String winner = GameHelper.getWinner(Move.SCISSORS, Move.SCISSORS);
-        assertEquals("TIE", winner);
+        assertEquals(TIE, winner);
     }
 
     @Test
