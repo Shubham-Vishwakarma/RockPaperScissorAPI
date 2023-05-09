@@ -9,7 +9,9 @@ import java.util.Optional;
 
 public class GameValidator {
 
-    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
+    private GameValidator() {}
+
+    @SuppressWarnings("ALL")
     public static boolean validateGame(Optional<Game> game) throws GameNotFoundException, GameOverException {
 
         if(game.isEmpty()) {
