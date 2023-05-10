@@ -4,7 +4,7 @@ import com.vocera.rockpaperscissors.assembler.GameModelAssembler;
 import com.vocera.rockpaperscissors.controllers.GameController;
 import com.vocera.rockpaperscissors.helpers.GameFactory;
 import com.vocera.rockpaperscissors.models.Game;
-import com.vocera.rockpaperscissors.services.GameService;
+import com.vocera.rockpaperscissors.services.GameServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class RockPaperScissorsApplicationTests {
 	private GameModelAssembler assembler;
 
 	@MockBean
-	private GameService gameService;
+	private GameServiceImpl gameService;
 
 	@Test
 	void startGameTest() throws Exception {

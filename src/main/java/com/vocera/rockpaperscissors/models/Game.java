@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
@@ -32,5 +33,5 @@ public class Game {
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     @JsonManagedReference
-    private Set<GameStep> steps;
+    private Set<GameStep> steps = new LinkedHashSet<>();
 }
