@@ -22,7 +22,7 @@ public class GameValidator {
             throw new GameOverException("Game Over. Please start a new game");
         }
 
-        return false;
+        return true;
     }
 
 }
