@@ -1,10 +1,10 @@
 package com.vocera.rockpaperscissors.models;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
 import java.util.Set;
 
 @Getter
