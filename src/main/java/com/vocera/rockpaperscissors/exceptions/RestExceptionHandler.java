@@ -20,7 +20,7 @@ import java.util.List;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<Object> handleAllException(Exception exception, WebRequest request) {
+    public final ResponseEntity<Object> handleUnknownException(Exception exception, WebRequest request) {
         Error error = new Error(HttpStatus.INTERNAL_SERVER_ERROR, "Something Went Wrong!!!", exception.getMessage());
         return buildResponse(error);
     }
@@ -34,14 +34,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     // Game Not found handler
     @ExceptionHandler(GameNotFoundException.class)
-    protected ResponseEntity<Object> handleItemNotFound(GameNotFoundException ex) {
+    protected ResponseEntity<Object> handleGameNotFoundException(GameNotFoundException ex) {
         Error error = new Error(HttpStatus.NOT_FOUND, "No Game Found", ex.getMessage());
         return buildResponse(error);
     }
 
     // Invalid parameter provided
     @ExceptionHandler(GameOverException.class)
-    public ResponseEntity<Object> handleInvalidRequest(GameOverException ex) {
+    public ResponseEntity<Object> handleGameOverException(GameOverException ex) {
         List<String> errors = List.of(ex.getMessage(), "Link: /start", "Results: /{token}/results");
         Error error = new Error(HttpStatus.BAD_REQUEST, "Game Over", errors);
         return buildResponse(error);
