@@ -19,13 +19,16 @@ import java.util.Locale;
 @RestController
 public class GameController {
 
-    @Autowired
-    private GameService service;
+    private final GameService service;
+    private final GameModelAssembler assembler;
 
     @Autowired
-    private GameModelAssembler assembler;
+    public GameController(GameService service, GameModelAssembler assembler) {
+        this.service = service;
+        this.assembler = assembler;
+    }
 
-    @GetMapping("/start")
+    @GetMapping("/game/start")
     public ResponseEntity<Object> startGame() {
         Game newGame = service.startGame();
         EntityModel<Game> game = assembler.toModel(newGame);

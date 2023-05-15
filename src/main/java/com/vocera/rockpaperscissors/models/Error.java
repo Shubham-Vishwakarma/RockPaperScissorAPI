@@ -1,18 +1,16 @@
 package com.vocera.rockpaperscissors.models;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 import java.util.List;
 
 @Getter
-@Setter
 public class Error {
 
-    private HttpStatus status;
-    private String message;
-    private List<String> errors;
+    private final HttpStatus status;
+    private final String message;
+    private final List<String> errors;
 
     public Error(HttpStatus status, String message, List<String> errors) {
         this.status = status;

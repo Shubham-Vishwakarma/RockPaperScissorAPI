@@ -32,7 +32,7 @@ class RestExceptionHandlerTest {
     void handleUnknownExceptionTest() throws Exception {
         when(controller.startGame()).thenThrow(new RuntimeException("Test Exception"));
 
-        this.mockMvc.perform(get("/start"))
+        this.mockMvc.perform(get("/game/start"))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.status", is("INTERNAL_SERVER_ERROR")))
