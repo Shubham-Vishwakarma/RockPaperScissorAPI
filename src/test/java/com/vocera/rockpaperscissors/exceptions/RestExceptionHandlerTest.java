@@ -1,76 +1,72 @@
 package com.vocera.rockpaperscissors.exceptions;
 
-import com.vocera.rockpaperscissors.controllers.GameController;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.web.servlet.MockMvc;
+import com.vocera.rockpaperscissors.models.Error;
+import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-
-@SpringBootTest
-@ActiveProfiles("integration-test")
-@AutoConfigureMockMvc
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class RestExceptionHandlerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    RestExceptionHandler handler;
 
-    @MockBean
-    private GameController controller;
-
-    @Test
-    void handleUnknownExceptionTest() throws Exception {
-        when(controller.startGame()).thenThrow(new RuntimeException("Test Exception"));
-
-        this.mockMvc.perform(get("/game/start"))
-                .andExpect(status().isInternalServerError())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status", is("INTERNAL_SERVER_ERROR")))
-                .andExpect(jsonPath("$.message", is(("Something Went Wrong!!!"))))
-                .andExpect(jsonPath("$.errors").isNotEmpty());
+    @BeforeAll
+    void setUp() {
+        handler = new RestExceptionHandler();
     }
 
     @Test
-    void handleNoHandlerFoundExceptionTest() throws Exception {
-        this.mockMvc.perform(get("/invalidUrl"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status", is("NOT_FOUND")))
-                .andExpect(jsonPath("$.message", is(("No endpoint GET /invalidUrl."))))
-                .andExpect(jsonPath("$.errors").isNotEmpty());
+    void handleUnknownExceptionTest() {
+        WebRequest request = Mockito.mock(WebRequest.class);
+        ResponseEntity<Object> responseEntity = handler.handleUnknownException(new RuntimeException("Test Exception"), request);
+        Error body = (Error) responseEntity.getBody();
+        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, responseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, body.getStatus());
+        Assertions.assertEquals("Something Went Wrong!!!", body.getMessage());
+        Assertions.assertEquals("Test Exception", body.getErrors().get(0));
+    }
+
+    @Test
+    void handleNoHandlerFoundExceptionTest() {
+        WebRequest request = Mockito.mock(WebRequest.class);
+        NoHandlerFoundException ex = new NoHandlerFoundException("GET", "/invalidUrl", new HttpHeaders());
+        ResponseEntity<Object> responseEntity = handler.handleNoHandlerFoundException(ex, new HttpHeaders(), HttpStatus.NOT_FOUND, request);
+
+        Error body = (Error) responseEntity.getBody();
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, body.getStatus());
+        Assertions.assertEquals("No endpoint GET /invalidUrl.", body.getMessage());
+        Assertions.assertEquals("/invalidUrl", body.getErrors().get(0));
     }
 
     @Test
     void handleGameNotFoundExceptionTest() throws Exception {
-        when(controller.gameResults("dummyToken")).thenThrow(new GameNotFoundException("Cannot find game with given token"));
+        ResponseEntity<Object> responseEntity = handler.handleGameNotFoundException(new GameNotFoundException("Cannot find game with given token"));
 
-        this.mockMvc.perform(get("/dummyToken/results"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status", is("NOT_FOUND")))
-                .andExpect(jsonPath("$.message", is(("No Game Found"))))
-                .andExpect(jsonPath("$.errors").isNotEmpty());
+        Error body = (Error) responseEntity.getBody();
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, body.getStatus());
+        Assertions.assertEquals("No Game Found", body.getMessage());
+        Assertions.assertEquals("Cannot find game with given token", body.getErrors().get(0));
     }
 
     @Test
     void handleGameOverExceptionTest() throws Exception {
-        when(controller.playRandomGame("dummyToken", "rock")).thenThrow(new GameOverException("Game Over"));
+        ResponseEntity<Object> responseEntity = handler.handleGameOverException(new GameOverException("Game Over"));
 
-        this.mockMvc.perform(get("/v1/dummyToken/rock"))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.status", is("BAD_REQUEST")))
-                .andExpect(jsonPath("$.message", is(("Game Over"))))
-                .andExpect(jsonPath("$.errors").isNotEmpty());
+        Error body = (Error) responseEntity.getBody();
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+        Assertions.assertEquals(HttpStatus.BAD_REQUEST, body.getStatus());
+        Assertions.assertEquals("Game Over", body.getMessage());
+        Assertions.assertEquals("Game Over", body.getErrors().get(0));
+    }
+
+    @AfterAll
+    void tearDown(){
+        handler = null;
     }
 }
