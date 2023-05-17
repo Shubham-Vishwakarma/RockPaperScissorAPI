@@ -8,11 +8,11 @@
 		<version>3.0.0</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.vocera</groupId>
-	<artifactId>rockpaperscissors</artifactId>
+	<groupId>com.game</groupId>
+	<artifactId>rockpaperscissor</artifactId>
 	<version>6.4.0</version>
-	<name>rockpaperscissors</name>
-	<description>Vocera Software Engineering Hiring Challenge</description>
+	<name>RockPaperScissor</name>
+	<description>Rock, Paper, Scissor Game API</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
