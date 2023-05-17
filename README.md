@@ -1,6 +1,6 @@
 # Rock Paper Scissors API
 
-[!build](https://github.com/Shubham-Vishwakarma/RockPaperScissorsAPI/actions/workflows/maven.yml/badge.svg)
+![Build](https://github.com/Shubham-Vishwakarma/RockPaperScissorsAPI/actions/workflows/maven.yml/badge.svg)
 
 ## Problem Statement
 ### Rules
