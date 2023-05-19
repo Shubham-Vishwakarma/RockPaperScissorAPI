@@ -3,9 +3,7 @@ package com.game.rockpaperscissor.controllers;
 import com.game.rockpaperscissor.assembler.GameModelAssembler;
 import com.game.rockpaperscissor.exceptions.GameNotFoundException;
 import com.game.rockpaperscissor.exceptions.GameOverException;
-import com.game.rockpaperscissor.models.Game;
-import com.game.rockpaperscissor.models.Move;
-import com.game.rockpaperscissor.models.Status;
+import com.game.rockpaperscissor.models.*;
 import com.game.rockpaperscissor.services.GameService;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
@@ -33,9 +31,11 @@ class GameControllerTest {
     void startGameTest() {
         Game game = new Game();
         game.setToken("dummyToken");
-        when(service.startGame()).thenReturn(game);
+        when(service.startGame(GameLevel.EASY)).thenReturn(game);
+        Level level = new Level();
+        level.setLevel("easy");
 
-        ResponseEntity<Object> responseGame = controller.startGame();
+        ResponseEntity<Object> responseGame = controller.startGame(level);
         EntityModel<Game> body = (EntityModel<Game>) responseGame.getBody();
         String responseToken = body.getContent().getToken();
         Assertions.assertEquals(HttpStatus.CREATED, responseGame.getStatusCode());

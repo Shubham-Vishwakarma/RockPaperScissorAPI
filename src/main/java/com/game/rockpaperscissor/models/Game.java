@@ -31,6 +31,10 @@ public class Game {
     @Column(name = "winner", nullable = false)
     private String winner = "NOT_DECIDED";
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "level", nullable = false)
+    private GameLevel level = GameLevel.MEDIUM;
+
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     @JsonManagedReference
     private Set<GameStep> steps = new LinkedHashSet<>();

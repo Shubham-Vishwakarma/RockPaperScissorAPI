@@ -2,6 +2,7 @@ package com.game.rockpaperscissor.cucumber.steps;
 
 import com.game.rockpaperscissor.cucumber.CommonSteps;
 import com.game.rockpaperscissor.models.Game;
+import com.game.rockpaperscissor.models.Level;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -17,7 +18,9 @@ public class ServerWinsSteps extends CommonSteps {
 
     @Given("a new game")
     public void a_new_game() {
-        ResponseEntity<Game> gameResponse = this.restTemplate.getForEntity("/game/start", Game.class);
+        Level level = new Level();
+        level.setLevel("easy");
+        ResponseEntity<Game> gameResponse = this.restTemplate.postForEntity("/startGame", level, Game.class);
         this.gameToken = gameResponse.getBody().getToken();
     }
 

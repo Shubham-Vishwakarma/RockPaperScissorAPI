@@ -1,9 +1,7 @@
-package com.game.rockpaperscissor.helpers;
+package com.game.rockpaperscissor.factory;
 
-import com.game.rockpaperscissor.models.Game;
-import com.game.rockpaperscissor.models.GameStep;
-import com.game.rockpaperscissor.models.Move;
-import com.game.rockpaperscissor.models.Status;
+import com.game.rockpaperscissor.helpers.GameHelper;
+import com.game.rockpaperscissor.models.*;
 
 import static com.game.rockpaperscissor.Constants.*;
 
@@ -12,17 +10,15 @@ public class GameFactory {
     private GameFactory() {
     }
 
-    public static Game createNewGame() {
-
+    public static Game createNewGame(GameLevel level) {
         String token = GameHelper.generateToken();
-
         Game newGame = new Game();
         newGame.setToken(token);
         newGame.setStatus(Status.READY);
         newGame.setUserScore(0);
         newGame.setServerScore(0);
         newGame.setWinner(NOT_DECIDED);
-
+        newGame.setLevel(level);
         return newGame;
     }
 

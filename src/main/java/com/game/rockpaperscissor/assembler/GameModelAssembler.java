@@ -2,6 +2,7 @@ package com.game.rockpaperscissor.assembler;
 
 import com.game.rockpaperscissor.controllers.GameController;
 import com.game.rockpaperscissor.models.Game;
+import com.game.rockpaperscissor.models.GameLevel;
 import lombok.SneakyThrows;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
@@ -16,7 +17,6 @@ public class GameModelAssembler implements RepresentationModelAssembler<Game, En
     @Override
     public EntityModel<Game> toModel(Game game) {
         return EntityModel.of(game,
-                linkTo(methodOn(GameController.class).startGame()).withRel("start"),
                 linkTo(methodOn(GameController.class).gameResults(game.getToken())).withRel("results"),
                 linkTo(methodOn(GameController.class).playRandomGame(game.getToken(), "rock")).withRel("playGame"),
                 linkTo(methodOn(GameController.class).playServerGame(game.getToken(), "rock")).withRel("serverAlwaysWins"));

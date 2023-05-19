@@ -2,6 +2,7 @@ package com.game.rockpaperscissor.cucumber.steps;
 
 import com.game.rockpaperscissor.cucumber.CommonSteps;
 import com.game.rockpaperscissor.models.Game;
+import com.game.rockpaperscissor.models.Level;
 import com.game.rockpaperscissor.models.Status;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -17,7 +18,9 @@ public class StartGameSteps extends CommonSteps {
 
     @When("the request is sent to url {string}")
     public void the_request_is_sent_to_url(String url) {
-        this.gameResponse = this.restTemplate.getForEntity(url, Game.class);
+        Level level = new Level();
+        level.setLevel("easy");
+        this.gameResponse = this.restTemplate.postForEntity(url, level, Game.class);
     }
 
     @Then("the response status should be {int}")

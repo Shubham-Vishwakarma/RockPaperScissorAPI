@@ -4,15 +4,15 @@ import com.game.rockpaperscissor.assembler.GameModelAssembler;
 import com.game.rockpaperscissor.exceptions.GameNotFoundException;
 import com.game.rockpaperscissor.exceptions.GameOverException;
 import com.game.rockpaperscissor.models.Game;
+import com.game.rockpaperscissor.models.GameLevel;
+import com.game.rockpaperscissor.models.Level;
 import com.game.rockpaperscissor.models.Move;
 import com.game.rockpaperscissor.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Locale;
 
@@ -28,9 +28,10 @@ public class GameController {
         this.assembler = assembler;
     }
 
-    @GetMapping("/game/start")
-    public ResponseEntity<Object> startGame() {
-        Game newGame = service.startGame();
+    @PostMapping("/startGame")
+    public ResponseEntity<Object> startGame(@RequestBody Level level) {
+        GameLevel l = GameLevel.valueOf(level.getLevel().toUpperCase(Locale.ROOT));
+        Game newGame = service.startGame(l);
         EntityModel<Game> game = assembler.toModel(newGame);
         return new ResponseEntity<>(game, HttpStatus.CREATED);
     }

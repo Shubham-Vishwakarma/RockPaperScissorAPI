@@ -2,15 +2,12 @@ package com.game.rockpaperscissor.services;
 
 import com.game.rockpaperscissor.exceptions.GameNotFoundException;
 import com.game.rockpaperscissor.exceptions.GameOverException;
+import com.game.rockpaperscissor.models.*;
 import com.game.rockpaperscissor.repository.GameRepository;
 import com.game.rockpaperscissor.repository.GameStepRepository;
-import com.game.rockpaperscissor.helpers.GameFactory;
+import com.game.rockpaperscissor.factory.GameFactory;
 import com.game.rockpaperscissor.helpers.GameHelper;
 import com.game.rockpaperscissor.helpers.GameValidator;
-import com.game.rockpaperscissor.models.Game;
-import com.game.rockpaperscissor.models.GameStep;
-import com.game.rockpaperscissor.models.Move;
-import com.game.rockpaperscissor.models.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,8 +26,8 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game startGame() {
-        Game newGame = GameFactory.createNewGame();
+    public Game startGame(GameLevel level) {
+        Game newGame = GameFactory.createNewGame(level);
         return gameRepository.save(newGame);
     }
 
