@@ -1,14 +1,14 @@
 package com.game.rockpaperscissor.cucumber.steps;
 
 import com.game.rockpaperscissor.cucumber.CommonSteps;
-import com.game.rockpaperscissor.models.Game;
-import com.game.rockpaperscissor.models.Level;
-import com.game.rockpaperscissor.models.Status;
-import io.cucumber.java.en.And;
+import com.game.rockpaperscissor.models.*;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import java.util.Locale;
 
 import static com.game.rockpaperscissor.Constants.NOT_DECIDED;
 
@@ -16,20 +16,16 @@ public class StartGameSteps extends CommonSteps {
 
     ResponseEntity<Game> gameResponse;
 
-    @When("the request is sent to url {string}")
-    public void the_request_is_sent_to_url(String url) {
-        Level level = new Level();
-        level.setLevel("easy");
-        this.gameResponse = this.restTemplate.postForEntity(url, level, Game.class);
+    @When("the level is passed as {string}")
+    public void the_level_is_passed_as(String levelString) {
+        this.gameResponse = executeStartGame(levelString);
     }
 
-    @Then("the response status should be {int}")
-    public void the_response_status_should_be(Integer statusCode) {
-        Assertions.assertEquals(this.gameResponse.getStatusCode().value(), statusCode);
-    }
+    @Then("a new game of {string} level is created")
+    public void a_new_game_of_level_is_created(String levelString) {
+        Assertions.assertEquals(HttpStatus.CREATED, gameResponse.getStatusCode());
 
-    @And("a new game is created")
-    public void a_new_game_is_created() {
+        GameLevel level = Enum.valueOf(GameLevel.class, levelString.toUpperCase(Locale.ROOT));
         Game newGame = this.gameResponse.getBody();
 
         Assertions.assertNotNull(newGame);
@@ -38,5 +34,6 @@ public class StartGameSteps extends CommonSteps {
         Assertions.assertEquals(0, newGame.getUserScore());
         Assertions.assertEquals(0, newGame.getServerScore());
         Assertions.assertEquals(NOT_DECIDED, newGame.getWinner());
+        Assertions.assertEquals(level, newGame.getLevel());
     }
 }

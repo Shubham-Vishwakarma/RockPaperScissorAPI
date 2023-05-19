@@ -18,9 +18,7 @@ public class ServerWinsSteps extends CommonSteps {
 
     @Given("a new game")
     public void a_new_game() {
-        Level level = new Level();
-        level.setLevel("easy");
-        ResponseEntity<Game> gameResponse = this.restTemplate.postForEntity("/startGame", level, Game.class);
+        ResponseEntity<Game> gameResponse = executeStartGame("easy");
         this.gameToken = gameResponse.getBody().getToken();
     }
 

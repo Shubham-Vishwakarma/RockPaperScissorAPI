@@ -1,5 +1,11 @@
-Feature: A New Game Is Created
-    Scenario: A new game is created successfully
-    When the request is sent to url "/startGame"
-    Then the response status should be 201
-    And a new game is created
+Feature: Create Game Of Different Level
+    A new game is created based on input level provided
+
+    Scenario Outline: A new game is created of defined level
+        When the level is passed as "<level>"
+        Then a new game of "<level>" level is created
+        Examples:
+            | level |
+            | easy  |
+            | medium |
+            | hard   |
