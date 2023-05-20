@@ -44,9 +44,9 @@ public class GameController {
         return new ResponseEntity<>(entityGame, HttpStatus.OK);
     }
 
-    @GetMapping("/{token}/results")
-    public ResponseEntity<Object> gameResults(@PathVariable("token") String token) throws GameNotFoundException {
-        Game game = service.getGameResults(token);
+    @PostMapping("/results")
+    public ResponseEntity<Object> gameResults(@RequestBody TokenDTO tokenDTO) throws GameNotFoundException {
+        Game game = service.getGameResults(tokenDTO.getToken());
         EntityModel<Game> entityGame = assembler.toModel(game);
         return new ResponseEntity<>(entityGame, HttpStatus.OK);
     }

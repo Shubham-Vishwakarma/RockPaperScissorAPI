@@ -4,6 +4,7 @@ import com.game.rockpaperscissor.controllers.GameController;
 import com.game.rockpaperscissor.models.Game;
 import com.game.rockpaperscissor.models.LevelDTO;
 import com.game.rockpaperscissor.models.PlayGameDTO;
+import com.game.rockpaperscissor.models.TokenDTO;
 import lombok.SneakyThrows;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
@@ -24,9 +25,12 @@ public class GameModelAssembler implements RepresentationModelAssembler<Game, En
         LevelDTO levelDTO = new LevelDTO();
         levelDTO.setLevel("medium");
 
+        TokenDTO tokenDTO = new TokenDTO();
+        tokenDTO.setToken(game.getToken());
+
         return EntityModel.of(game,
                 linkTo(methodOn(GameController.class).startGame(levelDTO)).withRel("startGame"),
                 linkTo(methodOn(GameController.class).playGame(playGameDTO)).withRel("playGame"),
-                linkTo(methodOn(GameController.class).gameResults(game.getToken())).withRel("results"));
+                linkTo(methodOn(GameController.class).gameResults(tokenDTO)).withRel("results"));
     }
 }

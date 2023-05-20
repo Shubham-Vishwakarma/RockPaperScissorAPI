@@ -1,8 +1,9 @@
-package com.game.rockpaperscissor.cucumber;
+package com.game.rockpaperscissor.cucumber.steps;
 
 import com.game.rockpaperscissor.models.Game;
 import com.game.rockpaperscissor.models.LevelDTO;
 import com.game.rockpaperscissor.models.PlayGameDTO;
+import com.game.rockpaperscissor.models.TokenDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,9 @@ public class CommonSteps {
     }
 
     protected final ResponseEntity<Game> executeGetResults(String token) {
-        String url = "/" + token + "/results";
-        return this.restTemplate.getForEntity(url, Game.class);
+        TokenDTO tokenDTO = new TokenDTO();
+        tokenDTO.setToken(token);
+
+        return this.restTemplate.postForEntity("/results", tokenDTO, Game.class);
     }
 }

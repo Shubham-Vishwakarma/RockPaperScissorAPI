@@ -42,7 +42,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     // Game Over handler
     @ExceptionHandler(GameOverException.class)
     public ResponseEntity<Object> handleGameOverException(GameOverException ex) {
-        List<String> errors = List.of(ex.getMessage(), "Link: /startGame", "Results: /{token}/results");
+        List<String> errors = List.of(ex.getMessage(), "Link: /startGame", "Results: /results");
         Error error = new Error(HttpStatus.BAD_REQUEST, "Game Over", errors);
         return buildResponse(error);
     }

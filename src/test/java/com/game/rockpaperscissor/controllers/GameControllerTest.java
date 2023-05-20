@@ -66,9 +66,12 @@ class GameControllerTest {
         Game game = new Game();
         game.setToken("dummyToken");
         game.setStatus(Status.GAME_OVER);
+        TokenDTO tokenDTO = new TokenDTO();
+        tokenDTO.setToken("dummyToken");
+
         when(service.getGameResults("dummyToken")).thenReturn(game);
 
-        ResponseEntity<Object> responseGame = controller.gameResults("dummyToken");
+        ResponseEntity<Object> responseGame = controller.gameResults(tokenDTO);
         EntityModel<Game> body = (EntityModel<Game>) responseGame.getBody();
 
         Assertions.assertEquals(HttpStatus.OK, responseGame.getStatusCode());

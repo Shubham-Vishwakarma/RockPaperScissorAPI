@@ -1,10 +1,8 @@
 package com.game.rockpaperscissor.cucumber.steps;
 
-import com.game.rockpaperscissor.cucumber.CommonSteps;
 import com.game.rockpaperscissor.models.Game;
 import com.game.rockpaperscissor.models.Status;
 import io.cucumber.java.Before;
-import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
