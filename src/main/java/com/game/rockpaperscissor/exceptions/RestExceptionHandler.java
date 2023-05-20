@@ -39,10 +39,10 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponse(error);
     }
 
-    // Invalid parameter provided
+    // Game Over handler
     @ExceptionHandler(GameOverException.class)
     public ResponseEntity<Object> handleGameOverException(GameOverException ex) {
-        List<String> errors = List.of(ex.getMessage(), "Link: /start", "Results: /{token}/results");
+        List<String> errors = List.of(ex.getMessage(), "Link: /startGame", "Results: /{token}/results");
         Error error = new Error(HttpStatus.BAD_REQUEST, "Game Over", errors);
         return buildResponse(error);
     }

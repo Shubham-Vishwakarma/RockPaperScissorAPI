@@ -1,4 +1,4 @@
-Feature: User plays the game
+Feature: User plays a valid game
 
   A valid game is provided, user is playing the game
   with different valid move

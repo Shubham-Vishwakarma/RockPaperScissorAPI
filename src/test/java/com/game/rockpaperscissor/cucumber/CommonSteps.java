@@ -17,12 +17,12 @@ public class CommonSteps {
         return this.restTemplate.postForEntity("/startGame", levelDTO, Game.class);
     }
 
-    protected final ResponseEntity<Game> executePlayGame(String token, String move) {
+    protected final ResponseEntity<Object> executePlayGame(String token, String move) {
         PlayGameDTO playGameDTO = new PlayGameDTO();
         playGameDTO.setToken(token);
         playGameDTO.setMove(move);
 
-        return this.restTemplate.postForEntity("/playGame", playGameDTO, Game.class);
+        return this.restTemplate.postForEntity("/playGame", playGameDTO, Object.class);
     }
 
     protected final ResponseEntity<Game> executeGetResults(String token) {
