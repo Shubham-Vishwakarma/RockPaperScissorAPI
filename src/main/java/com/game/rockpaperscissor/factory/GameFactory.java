@@ -22,31 +22,6 @@ public class GameFactory {
         return newGame;
     }
 
-    public static void updateGameStatus(Game game, Status status) {
-        game.setStatus(status);
-    }
-
-    public static void updateGameScore(Game game, GameStep step) {
-        String winner = step.getWinner();
-        if(winner.equals(USER)) {
-            game.setUserScore(game.getUserScore() + 1);
-        }
-        else if(winner.equals(SERVER)) {
-            game.setServerScore(game.getServerScore() + 1);
-        }
-    }
-
-    public static void updateIfGameOver(Game game) {
-        if(game.getServerScore() == 3) {
-            game.setWinner(SERVER);
-            game.setStatus(Status.GAME_OVER);
-        }
-        else if(game.getUserScore() == 3) {
-            game.setWinner(USER);
-            game.setStatus(Status.GAME_OVER);
-        }
-    }
-
     public static GameStep createGameStep(Game game, Move userMove, Move serverMove, String winner) {
         GameStep gameStep = new GameStep();
         gameStep.setGame(game);

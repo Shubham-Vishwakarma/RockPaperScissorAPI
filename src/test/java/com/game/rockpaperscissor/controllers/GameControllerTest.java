@@ -32,12 +32,13 @@ class GameControllerTest {
         Game game = new Game();
         game.setToken("dummyToken");
         when(service.startGame(GameLevel.EASY)).thenReturn(game);
-        Level level = new Level();
-        level.setLevel("easy");
+        LevelDTO levelDTO = new LevelDTO();
+        levelDTO.setLevel("easy");
 
-        ResponseEntity<Object> responseGame = controller.startGame(level);
+        ResponseEntity<Object> responseGame = controller.startGame(levelDTO);
         EntityModel<Game> body = (EntityModel<Game>) responseGame.getBody();
         String responseToken = body.getContent().getToken();
+
         Assertions.assertEquals(HttpStatus.CREATED, responseGame.getStatusCode());
         Assertions.assertEquals("dummyToken", responseToken);
     }
@@ -47,26 +48,14 @@ class GameControllerTest {
         Game game = new Game();
         game.setToken("dummyToken");
         game.setStatus(Status.IN_PROGRESS);
+        PlayGameDTO playGameDTO = new PlayGameDTO();
+        playGameDTO.setToken("dummyToken");
+        playGameDTO.setMove("paper");
+        when(service.playGame("dummyToken", Move.PAPER)).thenReturn(game);
 
-        when(service.playRandomGame("dummyToken", Move.PAPER)).thenReturn(game);
-
-        ResponseEntity<Object> responseGame = controller.playRandomGame("dummyToken", "paper");
+        ResponseEntity<Object> responseGame = controller.playGame(playGameDTO);
         EntityModel<Game> body = (EntityModel<Game>) responseGame.getBody();
-        Assertions.assertEquals(HttpStatus.OK, responseGame.getStatusCode());
-        Assertions.assertEquals("dummyToken", body.getContent().getToken());
-        Assertions.assertEquals(Status.IN_PROGRESS, body.getContent().getStatus());
-    }
 
-    @Test
-    void playServerGameTest() throws GameOverException, GameNotFoundException {
-        Game game = new Game();
-        game.setToken("dummyToken");
-        game.setStatus(Status.IN_PROGRESS);
-
-        when(service.playServerGame("dummyToken", Move.PAPER)).thenReturn(game);
-
-        ResponseEntity<Object> responseGame = controller.playServerGame("dummyToken", "paper");
-        EntityModel<Game> body = (EntityModel<Game>) responseGame.getBody();
         Assertions.assertEquals(HttpStatus.OK, responseGame.getStatusCode());
         Assertions.assertEquals("dummyToken", body.getContent().getToken());
         Assertions.assertEquals(Status.IN_PROGRESS, body.getContent().getStatus());
@@ -77,11 +66,11 @@ class GameControllerTest {
         Game game = new Game();
         game.setToken("dummyToken");
         game.setStatus(Status.GAME_OVER);
-
         when(service.getGameResults("dummyToken")).thenReturn(game);
 
         ResponseEntity<Object> responseGame = controller.gameResults("dummyToken");
         EntityModel<Game> body = (EntityModel<Game>) responseGame.getBody();
+
         Assertions.assertEquals(HttpStatus.OK, responseGame.getStatusCode());
         Assertions.assertEquals("dummyToken", body.getContent().getToken());
         Assertions.assertEquals(Status.GAME_OVER, body.getContent().getStatus());

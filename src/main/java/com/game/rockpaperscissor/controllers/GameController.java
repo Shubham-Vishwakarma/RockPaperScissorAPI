@@ -3,10 +3,7 @@ package com.game.rockpaperscissor.controllers;
 import com.game.rockpaperscissor.assembler.GameModelAssembler;
 import com.game.rockpaperscissor.exceptions.GameNotFoundException;
 import com.game.rockpaperscissor.exceptions.GameOverException;
-import com.game.rockpaperscissor.models.Game;
-import com.game.rockpaperscissor.models.GameLevel;
-import com.game.rockpaperscissor.models.Level;
-import com.game.rockpaperscissor.models.Move;
+import com.game.rockpaperscissor.models.*;
 import com.game.rockpaperscissor.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
@@ -29,28 +26,19 @@ public class GameController {
     }
 
     @PostMapping("/startGame")
-    public ResponseEntity<Object> startGame(@RequestBody Level level) {
-        GameLevel l = GameLevel.valueOf(level.getLevel().toUpperCase(Locale.ROOT));
+    public ResponseEntity<Object> startGame(@RequestBody LevelDTO levelDTO) {
+        GameLevel l = GameLevel.valueOf(levelDTO.getLevel().toUpperCase(Locale.ROOT));
         Game newGame = service.startGame(l);
         EntityModel<Game> game = assembler.toModel(newGame);
         return new ResponseEntity<>(game, HttpStatus.CREATED);
     }
 
-    @GetMapping("/v1/{token}/{move}")
-    public ResponseEntity<Object> playRandomGame(@PathVariable("token") String token, @PathVariable("move") String move)
+    @PostMapping("/playGame")
+    public ResponseEntity<Object> playGame(@RequestBody PlayGameDTO playGameDTO)
             throws GameOverException, GameNotFoundException {
-        Move m = Enum.valueOf(Move.class, move.toUpperCase(Locale.ROOT));
-        Game game = service.playRandomGame(token, m);
-
-        EntityModel<Game> entityGame = assembler.toModel(game);
-        return new ResponseEntity<>(entityGame, HttpStatus.OK);
-    }
-
-    @GetMapping("/v2/{token}/{move}")
-    public ResponseEntity<Object> playServerGame(@PathVariable("token") String token, @PathVariable("move") String move)
-            throws GameOverException, GameNotFoundException {
-        Move m = Enum.valueOf(Move.class, move.toUpperCase(Locale.ROOT));
-        Game game = service.playServerGame(token, m);
+        String token = playGameDTO.getToken();
+        Move move = Enum.valueOf(Move.class, playGameDTO.getMove().toUpperCase(Locale.ROOT));
+        Game game = service.playGame(token, move);
 
         EntityModel<Game> entityGame = assembler.toModel(game);
         return new ResponseEntity<>(entityGame, HttpStatus.OK);

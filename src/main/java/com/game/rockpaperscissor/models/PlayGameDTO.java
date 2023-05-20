@@ -1,0 +1,11 @@
+package com.game.rockpaperscissor.models;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class PlayGameDTO {
+    private String token;
+    private String move;
+}

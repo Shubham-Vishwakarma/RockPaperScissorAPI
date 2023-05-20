@@ -32,46 +32,28 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Game playRandomGame(String token, Move userMove) throws GameNotFoundException, GameOverException {
+    public Game playGame(String token, Move userMove) throws GameNotFoundException, GameOverException {
         Optional<Game> oGame = gameRepository.findById(token);
 
         // Check if Game exists and Game is not GAME_OVER
         GameValidator.validateGame(oGame);
-
         Game game = oGame.get();
-        GameFactory.updateGameStatus(game, Status.IN_PROGRESS);
+        GameLevel gameLevel = game.getLevel();
 
-        Move serverMove = GameHelper.generateServerMove();
+        Move serverMove = switch (gameLevel) {
+            case EASY -> // User Always Wins
+                    GameHelper.generateServerAlwaysLoosesMove(userMove);
+            case MEDIUM -> // Fair Game
+                    GameHelper.generateServerMove();
+            case HARD -> // Server Always Wins
+                    GameHelper.generateServerAlwaysWinsMove(userMove);
+        };
+
         String winner = GameHelper.getWinner(userMove, serverMove);
 
         GameStep gameStep = GameFactory.createGameStep(game, userMove, serverMove, winner);
-        GameFactory.updateGameScore(game, gameStep);
-        GameFactory.updateIfGameOver(game);
-
-        gameRepository.save(game);
-        gameStepRepository.save(gameStep);
-
-        game.getSteps().add(gameStep);
-
-        return game;
-    }
-
-    @Override
-    public Game playServerGame(String token, Move userMove) throws GameNotFoundException, GameOverException {
-        Optional<Game> oGame = gameRepository.findById(token);
-
-        // Check if Game exists and Game is not GAME_OVER
-        GameValidator.validateGame(oGame);
-
-        Game game = oGame.get();
-        game.setStatus(Status.IN_PROGRESS);
-
-        Move serverMove = GameHelper.generateServerMove(userMove);
-        String winner = GameHelper.getWinner(userMove, serverMove);
-
-        GameStep gameStep = GameFactory.createGameStep(game, userMove, serverMove, winner);
-        GameFactory.updateGameScore(game, gameStep);
-        GameFactory.updateIfGameOver(game);
+        GameHelper.updateGameScore(game, gameStep);
+        GameHelper.updateIfGameOver(game);
 
         gameRepository.save(game);
         gameStepRepository.save(gameStep);

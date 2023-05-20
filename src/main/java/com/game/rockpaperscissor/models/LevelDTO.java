@@ -7,6 +7,6 @@ import java.io.Serializable;
 
 @Getter
 @Setter
-public class Level implements Serializable {
+public class LevelDTO implements Serializable {
     private String level;
 }

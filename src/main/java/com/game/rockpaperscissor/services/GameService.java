@@ -10,9 +10,7 @@ public interface GameService {
 
     Game startGame(GameLevel level);
 
-    Game playRandomGame(String token, Move userMove) throws GameNotFoundException, GameOverException;
-
-    Game playServerGame(String token, Move userMove) throws GameNotFoundException, GameOverException;
+    Game playGame(String token, Move userMove) throws GameNotFoundException, GameOverException;
 
     Game getGameResults(String token) throws GameNotFoundException;
 }

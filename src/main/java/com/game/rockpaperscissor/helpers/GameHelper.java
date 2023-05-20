@@ -1,6 +1,9 @@
 package com.game.rockpaperscissor.helpers;
 
+import com.game.rockpaperscissor.models.Game;
+import com.game.rockpaperscissor.models.GameStep;
 import com.game.rockpaperscissor.models.Move;
+import com.game.rockpaperscissor.models.Status;
 
 import java.util.Random;
 
@@ -28,9 +31,9 @@ public class GameHelper {
 
     public static String getWinner(Move userMove, Move serverMove) {
 
-        if(userMove == Move.ROCK && serverMove == Move.SCISSORS)
+        if(userMove == Move.ROCK && serverMove == Move.SCISSOR)
             return USER;
-        else if(serverMove == Move.ROCK && userMove == Move.SCISSORS)
+        else if(serverMove == Move.ROCK && userMove == Move.SCISSOR)
             return SERVER;
 
         if(userMove == Move.PAPER && serverMove == Move.ROCK)
@@ -38,9 +41,9 @@ public class GameHelper {
         else if(serverMove == Move.PAPER && userMove == Move.ROCK)
             return SERVER;
 
-        if(userMove == Move.SCISSORS && serverMove == Move.PAPER)
+        if(userMove == Move.SCISSOR && serverMove == Move.PAPER)
             return USER;
-        else if(serverMove == Move.SCISSORS && userMove == Move.PAPER)
+        else if(serverMove == Move.SCISSOR && userMove == Move.PAPER)
             return SERVER;
 
         return TIE;
@@ -50,14 +53,40 @@ public class GameHelper {
         return Move.values()[random.nextInt(Move.values().length)];
     }
 
-    public static Move generateServerMove(Move userMove) {
-        switch (userMove) {
-            case ROCK: return Move.PAPER;
-            case PAPER: return Move.SCISSORS;
-            case SCISSORS:
-            default:
-                return Move.ROCK;
+    public static Move generateServerAlwaysWinsMove(Move userMove) {
+        return switch (userMove) {
+            case ROCK -> Move.PAPER;
+            case PAPER -> Move.SCISSOR;
+            default -> Move.ROCK;
+        };
+    }
+
+    public static Move generateServerAlwaysLoosesMove(Move userMove) {
+        return switch (userMove) {
+            case ROCK -> Move.SCISSOR;
+            case PAPER -> Move.ROCK;
+            default -> Move.PAPER;
+        };
+    }
+
+    public static void updateGameScore(Game game, GameStep step) {
+        String winner = step.getWinner();
+        if(winner.equals(USER)) {
+            game.setUserScore(game.getUserScore() + 1);
+        }
+        else if(winner.equals(SERVER)) {
+            game.setServerScore(game.getServerScore() + 1);
         }
     }
 
+    public static void updateIfGameOver(Game game) {
+        if(game.getServerScore() == 3) {
+            game.setWinner(SERVER);
+            game.setStatus(Status.GAME_OVER);
+        }
+        else if(game.getUserScore() == 3) {
+            game.setWinner(USER);
+            game.setStatus(Status.GAME_OVER);
+        }
+    }
 }
